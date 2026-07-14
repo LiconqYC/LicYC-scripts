@@ -11,6 +11,7 @@ local ui = Instance.new("ScreenGui")
 ui.Name = "ui"
 ui.Parent = game.CoreGui
 ui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ui.Enabled = true
 
 coroutine.wrap(
     function()
