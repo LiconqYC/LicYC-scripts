@@ -1639,7 +1639,7 @@ function lib:Window(text, preset, closebind)
                 function(current, pressed)
                     if not pressed then
                         if current.KeyCode.Name == Key and binding == false then
-                            pcall(callback)
+                            pcall(callback, current.KeyCode)
                         end
                     end
                 end
