@@ -101,7 +101,7 @@ function lib:Window(text, preset, closebind)
     PresetColor = preset or Color3.fromRGB(44, 120, 224)
     fs = false
     local Main = Instance.new("Frame")
-    local TabHold = Instance.new("ScrollingFrame")
+    local TabHold = Instance.new("Frame")
     local TabHoldLayout = Instance.new("UIListLayout")
     local Title = Instance.new("TextLabel")
     local TabFolder = Instance.new("Folder")
@@ -117,24 +117,17 @@ function lib:Window(text, preset, closebind)
     Main.ClipsDescendants = true
     Main.Visible = true
 
-    
     TabHold.Name = "TabHold"
     TabHold.Parent = Main
     TabHold.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     TabHold.BackgroundTransparency = 1.000
     TabHold.Position = UDim2.new(0.0339285731, 0, 0.147335425, 0)
-    TabHold.Size = UDim2.new(0, 107, 0, 254)   -- можно оставить ту же высоту, но теперь будет скролл
-    TabHold.Active = true                       -- разрешаем взаимодействие
-    TabHold.ScrollBarThickness = 2              -- толщина полосы прокрутки
-    TabHold.CanvasSize = UDim2.new(0, 0, 0, 0)  -- будет обновляться позже
-    TabHold.ClipsDescendants = true    
+    TabHold.Size = UDim2.new(0, 107, 0, 254)
 
-    
     TabHoldLayout.Name = "TabHoldLayout"
     TabHoldLayout.Parent = TabHold
     TabHoldLayout.SortOrder = Enum.SortOrder.LayoutOrder
     TabHoldLayout.Padding = UDim.new(0, 11)
-
 
     Title.Name = "Title"
     Title.Parent = Main
@@ -1448,10 +1441,9 @@ function lib:Window(text, preset, closebind)
                 end
             )
         end
-        
-        TabHold.CanvasSize = UDim2.new(0, 0, 0, TabHoldLayout.AbsoluteContentSize.Y + 10)
         return tabcontent
     end
     return tabhold
 end
 return lib
+
