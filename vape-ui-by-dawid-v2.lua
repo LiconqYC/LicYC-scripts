@@ -121,7 +121,7 @@ function lib:Window(text, preset, closebind)
     TabHold.Parent = Main
     TabHold.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     TabHold.BackgroundTransparency = 1.000
-    TabHold.Position = UDim2.new(0.04, 0, 0.25, 0)
+    TabHold.Position = UDim2.new(0.04, 0, 1.5, 0)
     TabHold.Size = UDim2.new(0, 107, 0, 254)   -- можно оставить ту же высоту, но теперь будет скролл
     TabHold.Active = true                       -- разрешаем взаимодействие
     TabHold.ScrollBarThickness = 2              -- толщина полосы прокрутки
