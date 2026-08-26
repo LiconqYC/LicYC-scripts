@@ -125,7 +125,7 @@ function lib:Window(text, preset, closebind)
     TabHold.Size = UDim2.new(0, 107, 0, 254)   -- можно оставить ту же высоту, но теперь будет скролл
     TabHold.Active = true                       -- разрешаем взаимодействие
     TabHold.ScrollBarThickness = 1              -- толщина полосы прокрутки
-    TabHold.ScrollBarImageTransparency = 0
+    TabHold.ScrollBarImageTransparency = 0.5
     TabHold.CanvasSize = UDim2.new(0, 0, 0, 0)  -- будет обновляться позже
     TabHold.ClipsDescendants = true
     TabHold.Visible = true
