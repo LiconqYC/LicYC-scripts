@@ -101,11 +101,102 @@ function lib:Window(text, preset, closebind)
     PresetColor = preset or Color3.fromRGB(44, 120, 224)
     fs = false
     local Main = Instance.new("Frame")
-    local TabHold = Instance.new("Frame")
+    local TabHold = Instance.new("ScrollingFrame")
     local TabHoldLayout = Instance.new("UIListLayout")
     local Title = Instance.new("TextLabel")
     local TabFolder = Instance.new("Folder")
     local DragFrame = Instance.new("Frame")
+
+    -- Создаём контейнер для скроллбара слева
+    local ScrollBar = Instance.new("Frame")
+    ScrollBar.Name = "ScrollBar"
+    ScrollBar.Parent = Main
+    ScrollBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    ScrollBar.BorderSizePixel = 0
+    ScrollBar.Position = UDim2.new(0.28, 0, 0.147, 0)  -- слева от вкладок
+    ScrollBar.Size = UDim2.new(0, 2, 0, 254)            -- тонкая полоса
+    ScrollBar.ClipsDescendants = true
+
+    -- Ползунок
+    local ScrollThumb = Instance.new("Frame")
+    ScrollThumb.Name = "ScrollThumb"
+    ScrollThumb.Parent = ScrollBar
+    ScrollThumb.BackgroundColor3 = Color3.fromRGB(150, 150, 150)
+    ScrollThumb.BorderSizePixel = 0
+    ScrollThumb.Size = UDim2.new(1, 0, 0, 20)           -- начальная высота
+    ScrollThumb.Position = UDim2.new(0, 0, 0, 0)
+
+        -- Скругление углов у ползунка
+    local thumbCorner = Instance.new("UICorner")
+    thumbCorner.CornerRadius = UDim.new(0, 2)           -- радиус 2 пикселя
+    thumbCorner.Parent = ScrollThumb
+    
+    -- Функция обновления размера и позиции ползунка
+    local function UpdateScrollBar()
+        local contentHeight = TabHold.CanvasSize.Y.Offset
+        local viewHeight = TabHold.Size.Y.Offset
+        if contentHeight <= viewHeight then
+            ScrollBar.Visible = false
+            return
+        end
+        ScrollBar.Visible = true
+        
+        local barHeight = ScrollBar.Size.Y.Offset
+        local thumbHeight = math.max(20, (viewHeight / contentHeight) * barHeight)
+        ScrollThumb.Size = UDim2.new(1, 0, 0, thumbHeight)
+        
+        local maxScroll = contentHeight - viewHeight
+        local scrollRatio = math.clamp(TabHold.CanvasPosition.Y / maxScroll, 0, 1)
+        local maxThumbTop = barHeight - thumbHeight
+        local thumbTop = scrollRatio * maxThumbTop
+        local thumbScale = thumbTop / barHeight
+        ScrollThumb.Position = UDim2.new(0, 0, thumbScale, 0)
+    end
+    
+    -- Обновляем при изменении содержимого
+    TabHoldLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(UpdateScrollBar)
+    TabHold:GetPropertyChangedSignal("CanvasPosition"):Connect(UpdateScrollBar)
+    
+    -- Перетаскивание ползунка
+    local dragging = false
+    local dragStart, startPos
+    
+    ScrollThumb.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position.Y
+            startPos = ScrollThumb.Position.Y.Scale   -- текущая позиция в масштабе 0..1
+        end
+    end)
+    
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+        end
+    end)
+    
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local barHeight = ScrollBar.AbsoluteSize.Y
+            local thumbHeight = ScrollThumb.AbsoluteSize.Y
+            if thumbHeight >= barHeight then return end
+            
+            local maxThumbTop = barHeight - thumbHeight
+            local delta = input.Position.Y - dragStart
+            local newThumbTop = math.clamp(startPos * barHeight + delta, 0, maxThumbTop)
+            local newScale = newThumbTop / barHeight
+            
+            ScrollThumb.Position = UDim2.new(0, 0, newScale, 0)
+            
+            -- Применяем скролл к TabHold
+            local contentHeight = TabHold.CanvasSize.Y.Offset
+            local viewHeight = TabHold.Size.Y.Offset
+            if contentHeight > viewHeight then
+                local scrollRatio = newThumbTop / maxThumbTop
+                TabHold.CanvasPosition = Vector2.new(0, scrollRatio * (contentHeight - viewHeight))
+            end
+        end
+    end)
 
     Main.Name = "Main"
     Main.Parent = ui
@@ -122,8 +213,12 @@ function lib:Window(text, preset, closebind)
     TabHold.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     TabHold.BackgroundTransparency = 1.000
     TabHold.Position = UDim2.new(0.0339285731, 0, 0.147335425, 0)
-    TabHold.Size = UDim2.new(0, 107, 0, 254)
-
+    TabHold.Size = UDim2.new(0, 107, 0, 254)   -- можно оставить ту же высоту, но теперь будет скролл
+    TabHold.Active = true                       -- разрешаем взаимодействие
+    TabHold.ScrollBarThickness = 0              -- толщина полосы прокрутки
+    TabHold.CanvasSize = UDim2.new(0, 0, 0, 0)  -- будет обновляться позже
+    TabHold.ClipsDescendants = true             -- обрезаем содержимое по границам
+    
     TabHoldLayout.Name = "TabHoldLayout"
     TabHoldLayout.Parent = TabHold
     TabHoldLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -1441,9 +1536,10 @@ function lib:Window(text, preset, closebind)
                 end
             )
         end
+        
+        TabHold.CanvasSize = UDim2.new(0, 0, 0, TabHoldLayout.AbsoluteContentSize.Y + 10) -- это
         return tabcontent
     end
     return tabhold
 end
 return lib
-
