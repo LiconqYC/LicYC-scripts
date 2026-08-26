@@ -117,18 +117,17 @@ function lib:Window(text, preset, closebind)
     Main.ClipsDescendants = true
     Main.Visible = true
 
+    
     TabHold.Name = "TabHold"
     TabHold.Parent = Main
     TabHold.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    TabHold.BackgroundTransparency = 1.000
-    TabHold.Position = UDim2.new(0.04, 0, 1.5, 0)
+    TabHold.BackgroundTransparency = 0.000
+    TabHold.Position = UDim2.new(0.0339285731, 0, 0.147335425, 0)
     TabHold.Size = UDim2.new(0, 107, 0, 254)   -- можно оставить ту же высоту, но теперь будет скролл
     TabHold.Active = true                       -- разрешаем взаимодействие
     TabHold.ScrollBarThickness = 2              -- толщина полосы прокрутки
-    --TabHold.ScrollBarImageTransparency = 0.5
     TabHold.CanvasSize = UDim2.new(0, 0, 0, 0)  -- будет обновляться позже
-    TabHold.ClipsDescendants = true
-    TabHold.Visible = true
+    TabHold.ClipsDescendants = true    
 
     
     TabHoldLayout.Name = "TabHoldLayout"
