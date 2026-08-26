@@ -125,7 +125,7 @@ function lib:Window(text, preset, closebind)
     TabHold.Size = UDim2.new(0, 90, 0, 254)
     TabHold.Active = true
     TabHold.ScrollBarThickness = 2
-    TabHold.ScrollBarImageColor3 = Color3.fromRGB(150, 150, 150)
+    --TabHold.ScrollBarImageColor3 = Color3.fromRGB(150, 150, 150)
     --TabHold.ScrollBarBackgroundTransparency = 1
     TabHold.CanvasSize = UDim2.new(0, 0, 0, 0)
     TabHold.ClipsDescendants = true
