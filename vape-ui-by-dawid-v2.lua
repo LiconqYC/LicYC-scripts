@@ -126,7 +126,8 @@ function lib:Window(text, preset, closebind)
     TabHold.Active = true                       -- разрешаем взаимодействие
     TabHold.ScrollBarThickness = 2              -- толщина полосы прокрутки
     TabHold.CanvasSize = UDim2.new(0, 0, 0, 0)  -- будет обновляться позже
-    TabHold.ClipsDescendants = true          
+    TabHold.ClipsDescendants = true
+    TabHold.Visible = false
 
     
     TabHoldLayout.Name = "TabHoldLayout"
