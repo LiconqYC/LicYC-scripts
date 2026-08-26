@@ -1,1 +1,0 @@
-loadstring(game:HttpGet"https://raw.githubusercontent.com/LiconqYC/LicYC-scripts/refs/heads/main/bebebe-script.lua")()
